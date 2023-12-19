@@ -6,6 +6,7 @@ export function processTests() {
     const sourceDirectory = './tests/selenium';
     const targetDirectory = './tests/e2e'
     const beforeEachRegex = /beforeEach\(async function\(\) \{\n\s+driver = await new Builder\(\).forBrowser\('chrome'\).build\(\)\n\s+vars = \{\}\n\s+\}\)/;
+    const afterEachRegex = /afterEach\(async function\(\) \{[\s\S]*?await driver.quit\(\);\s+\}\)/;
     const requireStatement = "const { Options } = require('selenium-webdriver/chrome');\n";
 
     const snippet = `
@@ -17,6 +18,18 @@ export function processTests() {
     vars = {};
   });
 `;
+
+    const afterEachSnippet = `
+    afterEach(async function() {
+    if (this.currentTest.state === 'failed') {
+        let imageName = \`screenshot-\${this.currentTest.title.replace(/\\s+/g, '_')}.png\`;
+        let screenshot = await driver.takeScreenshot();
+        require('fs').writeFileSync(imageName, screenshot, 'base64');
+    }
+    await driver.quit();
+    });
+    `;
+
 
     fs.readdir(sourceDirectory, (err, files) => {
         if (err) {
@@ -44,7 +57,11 @@ export function processTests() {
                     if (modifiedData.includes('beforeEach')) {
                         modifiedData = modifiedData.replace(beforeEachRegex, snippet.trim());
                     }
-
+                    
+                    if (modifiedData.match(afterEachRegex)) {
+                        modifiedData = modifiedData.replace(afterEachRegex, afterEachSnippet.trim());
+                    }
+                    
                     fs.writeFile(targetPath, modifiedData, 'utf8', (err) => {
                         if (err) {
                             console.error(`Error writing file ${file}:`, err);
