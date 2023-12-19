@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "selenium-preprocess": "./cli.js"
+  },
   "author": "James Zych <james@pxpx.co.uk>",
   "license": "ISC",
   "devDependencies": {
