@@ -1,6 +1,7 @@
 {
   "name": "selenium-tester",
   "version": "1.0.0",
+  "type": "module",
   "description": "Converts raw Selenium Mocha exports into files usable in GitHub actions",
   "main": "index.js",
   "scripts": {
