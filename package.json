@@ -1,0 +1,16 @@
+{
+  "name": "selenium-tester",
+  "version": "1.0.0",
+  "description": "Converts raw Selenium Mocha exports into files usable in GitHub actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Zych <james@pxpx.co.uk>",
+  "license": "ISC",
+  "devDependencies": {
+    "assert": "^2.1.0",
+    "mocha": "^10.2.0",
+    "selenium-webdriver": "^4.16.0"
+  }
+}
